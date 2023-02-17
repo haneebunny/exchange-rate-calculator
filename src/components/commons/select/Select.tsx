@@ -90,7 +90,7 @@ export default function Select(props: any) {
           ))}
         </div>
       </div>
-      <div className="border-t border-t-zinc-700 w-full h-[400px] overflow-scroll">
+      <div className="border-t border-t-zinc-700 w-full h-[400px] overflow-y-scroll">
         {(searchedTokens || tokens)?.map((token) => (
           <div
             key={token.id}
