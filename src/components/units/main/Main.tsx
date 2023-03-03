@@ -43,18 +43,20 @@ export default function Main() {
     { enabled: !!input && !!token }
   );
 
-  //   const allTokenPrice = Number(tokenPrice[token.id]?.usd * input);
-
+  // 새로고침해도 선택값이 남아있도록 하기
   useEffect(() => {
-    setToken(token);
-    setToken2(token2);
-  }, [token, token2]);
+    const savedTokens = localStorage.getItem("token");
+
+    if (savedTokens) {
+      console.log(JSON.parse(savedTokens));
+      setToken(JSON.parse(savedTokens));
+    }
+  }, []);
 
   // input 변경 시 allTokenPrice 계산
   useEffect(() => {
     if (tokenPrice) {
       setAllTokenPrice(Number(tokenPrice[token.id]?.usd * input));
-      console.log("::::", allTokenPrice);
     }
   }, [input, tokenPrice]);
 
@@ -77,11 +79,6 @@ export default function Main() {
     setInput2(Number(event.target.value));
   };
 
-  console.log("all", allTokenPrice);
-  console.log("input", input, "input2", input2);
-  console.log(token, token2, tokenPrice, token2Price);
-
-  console.log(Math.floor(input2 * 10000000000) / 10000000000);
   //   console.log(allTokenPrice / token2Price[token2.id].usd);
   return (
     <main className="w-screen h-screen bg-black">

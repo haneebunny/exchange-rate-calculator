@@ -47,6 +47,7 @@ export default function Select(props: any) {
       id,
       name,
     });
+    localStorage.setItem("token", JSON.stringify({ id, name }));
     props.setModalOpen(false);
   };
 
