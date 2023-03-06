@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 // components
@@ -27,6 +27,17 @@ export default function Main() {
   const [input2, setInput2] = useState<number>(0);
 
   const [allTokenPrice, setAllTokenPrice] = useState<number>(0);
+
+  const handleChangeInput = useCallback((value: number) => {
+    const temp = removeZeros(Number(value));
+    console.log("removeZeros 후:", temp);
+    setInput(temp);
+  }, []);
+
+  const handleChangeInput2 = useCallback((value: number) => {
+    const temp = removeZeros(Number(value));
+    setInput2(temp);
+  }, []);
 
   const {
     data: tokenPrice,
@@ -60,26 +71,34 @@ export default function Main() {
     }
   }, [input, tokenPrice]);
 
-  //   useEffect(() => {
-  //     if (token2Price) {
-  //       setAllTokenPrice(Number(token2Price[token2.id]?.usd * input));
-  //     }
-  //   }, [input2]);
+  useEffect(() => {
+    if (token2Price) {
+      setAllTokenPrice(Number(token2Price[token2.id]?.usd * input2));
+    }
+  }, [input2, token2Price]);
 
   // allTokenPrice 나오면 input2 값 변경
   useEffect(() => {
     if (token2Price) setInput2(allTokenPrice / token2Price[token2.id].usd);
-  }, [allTokenPrice, token2Price]);
+  }, [allTokenPrice]);
+
+  // allTokenPrice 나오면 input 값 변경
+  useEffect(() => {
+    if (tokenPrice) setInput(allTokenPrice / tokenPrice[token.id].usd);
+  }, [allTokenPrice]);
 
   const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput(Number(event.target.value));
+    console.log("event.target.value::", event.target.value);
+    const value = Number(event.target.value);
+    console.log("Number한 event.target.value::", value);
+    handleChangeInput(value);
   };
 
   const onChangeInput2 = (event: ChangeEvent<HTMLInputElement>) => {
-    setInput2(Number(event.target.value));
+    const value = Number(event.target.value);
+    handleChangeInput2(value);
   };
-
-  //   console.log(allTokenPrice / token2Price[token2.id].usd);
+  console.log(input);
   return (
     <main className="w-screen h-screen bg-black">
       <section className="relative w-[400px] h-full flex flex-col items-center mx-auto ">
@@ -99,7 +118,8 @@ export default function Main() {
               <div className="flex flex-row justify-between">
                 <input
                   type="number"
-                  value={removeZeros(input)}
+                  //    step="0.0000000001"
+                  value={roundNumber(input)}
                   onChange={onChangeInput}
                   className="w-full text-xl bg-transparent text-zinc-200 appearance-none"
                   placeholder="0.0"
@@ -121,7 +141,7 @@ export default function Main() {
                 <input
                   type="number"
                   className="w-full text-xl bg-transparent text-zinc-200 appearance-none"
-                  value={removeZeros(roundNumber(input2 || 0))}
+                  value={roundNumber(input2)}
                   onChange={onChangeInput2}
                   placeholder="0.0"
                 />
