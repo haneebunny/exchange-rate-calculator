@@ -5,7 +5,7 @@ export const roundNumber = (number: number) => {
 };
 
 export const removeZeros = (number: number) => {
-  if (isNaN(number)) return 0; // 입력값이 숫자가 아니면 0을 반환
+  if (isNaN(number)) return 0;
   const temp = number;
   console.log(temp);
   const newNum = String(temp).replace(/(^0+(?!$))/, "");

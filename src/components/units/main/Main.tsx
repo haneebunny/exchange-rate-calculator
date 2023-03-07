@@ -31,6 +31,7 @@ export default function Main() {
   const handleChangeInput = useCallback((value: number) => {
     const temp = removeZeros(Number(value));
     console.log("removeZeros 후:", temp);
+
     setInput(temp);
   }, []);
 
